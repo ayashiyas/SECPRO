@@ -1,0 +1,48 @@
+<!-- templates/report_list.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scan History — VulnScanner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 p-4 sm:p-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-8">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-100 text-center sm:text-left mb-4 sm:mb-0">
+        Scan History
+      </h1>
+      <a href="/index" class="text-gray-400 font-medium hover:text-gray-100 transition-colors duration-200">
+        ← New Scan
+      </a>
+    </div>
+
+    {% if reports %}
+    <div class="bg-gray-800 p-6 rounded-2xl shadow-lg">
+      <ul class="space-y-4">
+        {% for report in reports %}
+          <li class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 bg-gray-700 rounded-xl">
+            <div class="flex-grow">
+              <p class="font-semibold text-gray-100 break-words">{{ report.url }}</p>
+              <p class="text-sm text-gray-400 italic mt-1">{{ report.timestamp }}</p>
+            </div>
+            <a href="/results/{{ report.id }}" class="mt-4 sm:mt-0 px-4 py-2 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors duration-200">
+              View Report
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% else %}
+      <div class="bg-gray-800 p-6 rounded-2xl shadow-lg text-center">
+        <p class="text-lg text-gray-300">No scan reports found. Start a new scan to see results here.</p>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

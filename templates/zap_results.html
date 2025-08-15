@@ -1,0 +1,70 @@
+
+<!-- templates/zap_results.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scan Results — VulnScanner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 p-4 sm:p-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-8">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-100 text-center sm:text-left mb-4 sm:mb-0">
+        OWASP Top 10 Scan Results for <span class="text-gray-400 font-medium">{{ target_url }}</span>
+      </h1>
+      <a href="/report-list" class="text-gray-400 font-medium hover:text-gray-100 transition-colors duration-200">
+        ← Back to History
+      </a>
+    </div>
+
+    <div class="bg-gray-800 p-6 rounded-2xl shadow-lg mb-6">
+      <h2 class="text-2xl font-semibold text-gray-100 mb-4 pb-2 border-b-2 border-gray-700">Spider Results (Pages Found)</h2>
+      {% if pages %}
+        <ul class="list-disc list-inside space-y-2 text-gray-300">
+          {% for page in pages %}
+            <li>{{ page }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-300">No pages found.</p>
+      {% endif %}
+    </div>
+
+    <div class="bg-gray-800 p-6 rounded-2xl shadow-lg">
+      <h2 class="text-2xl font-semibold text-gray-100 mb-4 pb-2 border-b-2 border-gray-700">Targeted Scan Results</h2>
+      {% if results %}
+        <ul class="space-y-6">
+          {% for r in results %}
+            <li class="p-4 bg-gray-700 rounded-xl">
+              <div class="flex items-start mb-2">
+                <span class="inline-block px-3 py-1 text-sm font-bold rounded-full text-white shrink-0 mr-4
+                  {% if r.risk == 'High' %} bg-red-600
+                  {% elif r.risk == 'Medium' %} bg-yellow-500
+                  {% elif r.risk == 'Low' %} bg-blue-500
+                  {% else %} bg-gray-500
+                  {% endif %}">
+                  {{ r.risk }}
+                </span>
+                <p class="font-semibold text-gray-100 text-lg">{{ r.description }}</p>
+              </div>
+              <p class="text-sm text-gray-400 italic mt-1 break-words">URL: {{ r.url }}</p>
+              <div class="mt-4">
+                <h3 class="font-semibold text-gray-200">Mitigation:</h3>
+                <p class="text-gray-300 mt-1">{{ r.mitigation }}</p>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-300">No OWASP Top 10 vulnerabilities found.</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

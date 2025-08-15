@@ -1,0 +1,81 @@
+<!-- templates/loading.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanning...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+
+    <div class="bg-gray-800 p-8 md:p-12 rounded-2xl shadow-xl max-w-xl w-full text-center border border-gray-700">
+        <h1 class="text-3xl font-bold mb-4">Scanning...</h1>
+        <p id="phaseText" class="text-gray-400 mb-8">Performing a targeted OWASP Top 10 scan...</p>
+
+        <!-- Progress bar container -->
+        <div class="w-full bg-gray-700 rounded-full h-4 mb-4">
+            <!-- Progress bar itself -->
+            <div id="progressBar" class="bg-blue-500 h-4 rounded-full transition-all duration-300 ease-in-out" style="width: 0%;"></div>
+        </div>
+
+        <!-- Percentage display -->
+        <p id="progressText" class="text-xl font-mono text-blue-300">0%</p>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const zapScanId = urlParams.get('zap_scan_id');
+        const targetUrl = urlParams.get('target_url');
+
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const phaseText = document.getElementById('phaseText');
+
+        async function fetchScanStatus() {
+            try {
+                const response = await fetch(`/status?zap_scan_id=${zapScanId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                
+                const progress = parseInt(data.status);
+                const phase = data.phase;
+
+                if (!isNaN(progress) && progress >= 0 && progress <= 100) {
+                    progressBar.style.width = progress + '%';
+                    progressText.textContent = progress + '%';
+                }
+                
+                if (phase === 'spidering') {
+                    phaseText.textContent = 'Step 1 of 2: Performing Spider Scan...';
+                } else if (phase === 'active_scanning') {
+                    phaseText.textContent = 'Step 2 of 2: Performing Targeted OWASP Scan...';
+                } else if (phase === 'complete') {
+                    phaseText.textContent = 'Scan complete. Redirecting...';
+                }
+
+                if (progress >= 100 && phase === 'complete') {
+                    clearInterval(pollInterval);
+                    console.log("Scan complete, redirecting to report page.");
+                    window.location.href = `/results/${zapScanId}`;
+                }
+
+            } catch (error) {
+                console.error('Error fetching scan status:', error);
+            }
+        }
+
+        const pollInterval = setInterval(fetchScanStatus, 1000);
+    </script>
+
+</body>
+</html>
+

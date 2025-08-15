@@ -1,0 +1,86 @@
+body.dark {
+    background-color: #121212;
+    color: #f0f0f0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #1f1f1f;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+h1.main-title {
+    color: #00ffff;
+    text-align: center;
+}
+
+p.description {
+    text-align: center;
+    font-size: 1.1em;
+}
+
+input[type=text], select {
+    width: 60%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: none;
+}
+
+button.btn, .btn {
+    background-color: #00ffff;
+    color: #121212;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+button.btn:hover, .btn:hover {
+    background-color: #00b3b3;
+}
+
+a.btn-secondary {
+    display: inline-block;
+    padding: 8px 18px;
+    margin: 10px 5px;
+    border-radius: 6px;
+    background-color: #555555;
+    color: #fff;
+    text-decoration: none;
+}
+
+a.btn-secondary:hover {
+    background-color: #777777;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #444;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #333;
+    color: #00ffff;
+}
+
+.risk-score {
+    font-weight: bold;
+    color: #ff4444;
+}
+
+
+
